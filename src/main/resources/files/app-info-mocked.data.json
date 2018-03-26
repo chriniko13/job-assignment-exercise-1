@@ -1,0 +1,33 @@
+[
+  {
+    "name": "App1",
+    "extraInfo": {
+      "category": "category1",
+      "publisher": "publisher1"
+    }
+  },
+  {
+    "name": "App2",
+    "extraInfo": {
+      "category": "category2",
+      "publisher": "publisher2"
+    }
+  },
+  {
+    "name": "App3",
+    "extraInfo": {
+      "category": "category3",
+      "publisher": "publisher3"
+    }
+  },
+  {
+    "name": "App4",
+    "extraInfo": {
+      "category": "category4",
+      "publisher": "publisher4"
+    }
+  }
+]
+
+
+

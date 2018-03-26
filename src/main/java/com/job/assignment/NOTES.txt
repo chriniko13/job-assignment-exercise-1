@@ -1,0 +1,16 @@
+-----------
+  NOTES
+-----------
+
+1) To see the output of jacoco go to target/site/jacoco-ut/index.html
+
+2) mvn clean test (runs unit tests only and creates jacoco test coverage report)
+
+3) mvn clean verify -P integration-test (runs integration tests only)
+
+4) mvn clean verify -P all-tests (runs unit tests and creates jacoco test coverage for them, and then runs integration tests)
+
+5) in order to run mutation for unit tests, execute: org.pitest:pitest-maven:mutationCoverage
+    and see the output in the dir: target/pit-reports/YYYYMMDDHHMI/index.html
+
+Nikolaos Christidis.

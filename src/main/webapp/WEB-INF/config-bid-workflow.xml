@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- CHANNELS DECLARATION -->
+    <int:channel id="parse-bid-channel" datatype="com.job.assignment.bidder.dto.request.BidRequestDto"/>
+
+    <int:channel id="bid-match-targeting-channel" datatype="com.job.assignment.bidder.dto.request.BidRequestDto"/>
+
+    <int:channel id="filtered-bid-channel"
+                 datatype="com.job.assignment.bidder.dto.internal.BidMatchTargetingTransformerResultDto"/>
+
+    <int:channel id="sorted-on-price-bid-channel"
+                 datatype="com.job.assignment.bidder.dto.internal.BidSortedOnPriceTransformerResultDto"/>
+
+    <int:channel id="bid-response-channel"
+                 datatype="com.job.assignment.bidder.dto.internal.BidResponseTransformerResultDto"/>
+
+
+    <!-- WORKFLOW DECLARATION -->
+    <int:gateway service-interface="com.job.assignment.bidder.gateway.BidGateway"
+                 default-request-channel="parse-bid-channel"
+                 default-reply-channel="bid-response-channel"/>
+
+    <int:header-enricher input-channel="parse-bid-channel"
+                         output-channel="bid-match-targeting-channel">
+        <int:header name="bid-request-dto-id" expression="payload.id"/>
+        <int:header name="all-campaigns" ref="campaignServiceImpl" method="findAll"/>
+    </int:header-enricher>
+
+    <int:transformer input-channel="bid-match-targeting-channel"
+                     output-channel="filtered-bid-channel"
+                     ref="bidMatchTargetingTransformer"
+                     method="transform"/>
+
+    <int:transformer input-channel="filtered-bid-channel"
+                     output-channel="sorted-on-price-bid-channel"
+                     ref="bidSortedOnPriceTransformer"
+                     method="transform"/>
+
+    <int:transformer input-channel="sorted-on-price-bid-channel"
+                     output-channel="bid-response-channel"
+                     ref="bidResponseTransformer"
+                     method="transform"/>
+
+</beans>
